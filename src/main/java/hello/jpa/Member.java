@@ -14,10 +14,12 @@ public class Member {
 
     private String username;
 
-    /*@Column(name = "team_id")
-    private Long teamId;*/
-
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
+
+    @OneToOne
+    @JoinColumn(name = "locker_id")
+    private Locker locker;
+
 }
