@@ -1,6 +1,4 @@
-import hello.jpa.Member;
-import hello.jpa.Movie;
-import hello.jpa.Team;
+import hello.jpa.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -21,27 +19,21 @@ public class JpaMain {
         //SQL은 데이터베이스 테이블을 대상으로 쿼리
         try {
 
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            em.persist(member1);
+            Parent parent = new Parent();
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            em.persist(member2);
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
 
             em.flush();
             em.clear();
 
-            Member refMember = em.getReference(Member.class, member1.getId());
-            System.out.println("refMember: " + refMember.getClass());
+            Parent p = em.find(Parent.class, parent.getId());
 
-            Hibernate.initialize(refMember);
-
-            System.out.println("isLoaded: " + emf.getPersistenceUnitUtil().isLoaded(refMember));
-            /*Member m1 = em.find(Member.class, member1.getId());
-            System.out.println("m1: " + m1.getClass());
-
-            System.out.println("compare: " + (m1 == refMember));*/
+            p.getChildList().remove(0);
 
             tx.commit();
         } catch (Exception e) {
