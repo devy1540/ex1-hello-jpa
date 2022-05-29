@@ -1,10 +1,9 @@
 import hello.jpa.Member;
+import hello.jpa.Movie;
 import hello.jpa.Team;
+import org.hibernate.Hibernate;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.util.List;
 
 public class JpaMain {
@@ -21,36 +20,49 @@ public class JpaMain {
         //JPQL은 엔티티 객체를 대상으로 쿼리 -> 객체지향SQL 이다...
         //SQL은 데이터베이스 테이블을 대상으로 쿼리
         try {
-            //저장
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
 
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setTeam(team);
-            em.persist(member);
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            em.persist(member1);
 
-//            team.getMembers().add(member);
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            em.persist(member2);
 
-            /*em.flush();
-            em.clear();*/
+            em.flush();
+            em.clear();
 
-            Team findTeam = em.find(Team.class, team.getId());
-            List<Member> members = findTeam.getMembers();
+            Member refMember = em.getReference(Member.class, member1.getId());
+            System.out.println("refMember: " + refMember.getClass());
 
-            for(Member m : members) {
-                System.out.println(m.getUsername());
-            }
+            Hibernate.initialize(refMember);
 
+            System.out.println("isLoaded: " + emf.getPersistenceUnitUtil().isLoaded(refMember));
+            /*Member m1 = em.find(Member.class, member1.getId());
+            System.out.println("m1: " + m1.getClass());
+
+            System.out.println("compare: " + (m1 == refMember));*/
 
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
             em.close();
         }
 
         emf.close();
+    }
+
+    private static void printMember(Member member) {
+        System.out.println("name: " + member.getUsername());
+    }
+
+    private static void printMemberAndTeam(Member member) {
+        String name = member.getUsername();
+        System.out.println("username: " + name);
+
+        Team team = member.getTeam();
+        System.out.println("team: " + team.getName());
     }
 }

@@ -11,7 +11,7 @@
 
             <!-- 하이버네이트 고유 설정 -->
             <!-- 데이터베이스 마다 고유로 쓰는 언어(방언)이 있어 해당 방언을 사용하겠다 라고 명시 -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL94Dialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.use_sql_comments" value="true"/>
@@ -20,7 +20,7 @@
 <!--            <property name="hibernate.jdbc.batch_size" value="10"/>-->
 
             <!-- ddl 자동 생성 -->
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
         </properties>
     </persistence-unit>
 </persistence>
