@@ -1,4 +1,8 @@
 import hello.jpa.*;
+import hello.jpa.Address;
+import hello.jpa.Member;
+import hello.jpa.Movie;
+import hello.jpa.Team;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -18,22 +22,27 @@ public class JpaMain {
         //JPQL은 엔티티 객체를 대상으로 쿼리 -> 객체지향SQL 이다...
         //SQL은 데이터베이스 테이블을 대상으로 쿼리
         try {
+            Address address = new Address("city", "street", "10000");
 
-            Parent parent = new Parent();
-            Child child1 = new Child();
-            Child child2 = new Child();
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            member1.setAddress(address);
+            em.persist(member1);
 
-            parent.addChild(child1);
-            parent.addChild(child2);
+            Address newAddress = new Address(address.getCity(), address.getStreet(), address.getZipcode());
 
-            em.persist(parent);
+//            em.flush();
+//            em.clear();
 
-            em.flush();
-            em.clear();
+//            Member refMember = em.getReference(Member.class, member1.getId());
+//            System.out.println("refMember: " + refMember.getClass());
+//            Hibernate.initialize(refMember);
 
-            Parent p = em.find(Parent.class, parent.getId());
+//            System.out.println("isLoaded: " + emf.getPersistenceUnitUtil().isLoaded(refMember));
+            /*Member m1 = em.find(Member.class, member1.getId());
+            System.out.println("m1: " + m1.getClass());
 
-            p.getChildList().remove(0);
+            System.out.println("compare: " + (m1 == refMember));*/
 
             tx.commit();
         } catch (Exception e) {
