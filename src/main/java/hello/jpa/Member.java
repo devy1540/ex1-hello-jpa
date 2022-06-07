@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.*;
 
 @Data
 @Entity
@@ -27,14 +27,20 @@ public class Member {
     private Period period;
 
     @Embedded
-    private Address address;
+    private Address homeAddress;
 
-    @Embedded
-    @AttributeOverrides(value = {
-            @AttributeOverride(name = "city", column = @Column(name = "work_city")),
-            @AttributeOverride(name = "street", column = @Column(name = "work_street")),
-            @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
-    })
-    private Address workAddress;
+    @ElementCollection
+    @CollectionTable(
+            name = "favorite_food",
+            joinColumns = @JoinColumn(name = "member_id")
+    )
+    @Column(name = "food_name")
+    private Set<String> favoriteFoods = new HashSet<>();
 
+    @ElementCollection
+    @CollectionTable(
+            name = "address",
+            joinColumns = @JoinColumn(name = "member_id")
+    )
+    private List<Address> addressHistory = new ArrayList<>();
 }
