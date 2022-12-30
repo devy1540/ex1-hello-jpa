@@ -48,6 +48,10 @@ public class JpaMain {
             member1.getAddressHistory().remove(new Address("old1", "old_street1", "1"));
             member1.getAddressHistory().add(new Address("newCity1", "old_street1", "1"));
 
+
+            Address address = new Address("asd", "asd", "asd");
+            address.getCity();
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
